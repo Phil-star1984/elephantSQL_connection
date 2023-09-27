@@ -1,10 +1,14 @@
 import express from "express";
-/* import { getAllOrders } from "../controllers/orders.js"; */
+import {
+  getAllOrders,
+  getOneOrder,
+  createNewOrder,
+} from "../controllers/orders.js";
 
 const ordersRouter = express.Router();
 
-ordersRouter.get("/", function (req, res) {
-  res.send("Route will send all orders");
-});
+ordersRouter.get("/", getAllOrders);
+ordersRouter.get("/:id", getOneOrder);
+ordersRouter.post("/", createNewOrder);
 
-export default ordersRouter();
+export default ordersRouter;

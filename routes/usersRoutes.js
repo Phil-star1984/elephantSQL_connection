@@ -4,7 +4,7 @@ import {
   getSingleUser,
   createNewUser,
   updateUser,
-  deleteUser
+  deleteUser,
 } from "../controllers/users.js";
 
 const usersRouter = express.Router();
@@ -14,6 +14,5 @@ usersRouter.get("/:id", getSingleUser);
 usersRouter.post("/", createNewUser);
 usersRouter.put("/:id", updateUser);
 usersRouter.delete("/:id", deleteUser);
-
 
 export default usersRouter;
