@@ -75,7 +75,23 @@ export const updateUser = (req, res) => {
       console.log("Updating User did not work.");
     } else {
       console.log("Success! User now updated.");
-      res.json(`Got a PUT request and updated User at /users/${req.params.id}`);
+      res.send(`Got a PUT request and updated User at /users/${req.params.id}`);
     }
   });
+};
+
+export const deleteUser = (req, res) => {
+  const userIdtoDelete = req.params.id;
+  /* console.log(userIdtoDelete); */
+  pool.query(
+    `DELETE FROM users WHERE id = ${userIdtoDelete};`,
+    (error, result) => {
+      if (error) {
+        console.log("Could not delete User.");
+      } else {
+        console.log("Success, User deleted!");
+        res.json({ message: "user successfully deleted" });
+      }
+    }
+  );
 };
