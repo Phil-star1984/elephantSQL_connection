@@ -25,6 +25,7 @@ export const createNewUser = (req, res) => {
   console.log(req.body.first_name);
 
   const newUser = {
+    /* wie bekomme ich hier eine fortlaufende id hin? users.length +1 ?*/
     id: req.body.id,
     first_name: req.body.first_name,
     last_name: req.body.last_name,
@@ -55,4 +56,26 @@ export const createNewUser = (req, res) => {
       }
     }
   );
+};
+
+export const updateUser = (req, res) => {
+  const updateValues = [
+    req.body.id,
+    req.body.first_name,
+    req.body.last_name,
+    req.body.age,
+    req.body.active,
+    req.params.id, // Fügt die id als letzten Wert hinzu
+  ];
+
+  const sql = `UPDATE users SET id = $1, first_name = $2, last_name = $3, age = $4, active = $5 WHERE id = $6`;
+
+  pool.query(sql, updateValues, (error, result) => {
+    if (error) {
+      console.log("Updating User did not work.");
+    } else {
+      console.log("Success! User now updated.");
+      res.json(`Got a PUT request and updated User at /users/${req.params.id}`);
+    }
+  });
 };
