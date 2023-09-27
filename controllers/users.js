@@ -21,41 +21,20 @@ export const getSingleUser = async (req, res) => {
   }
 };
 
-export const createNewUser = (req, res) => {
-  console.log(req.body.first_name);
+export const createNewUser = async (req, res) => {
+  const { first_name, last_name, age, active } = req.body;
 
-  const newUser = {
-    /* wie bekomme ich hier eine fortlaufende id hin? users.length +1 ?*/
-    id: req.body.id,
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
-    age: req.body.age,
-    active: req.body.active,
-  };
+  try {
+    const result = await pool.query(
+      `INSERT INTO users (first_name, last_name, age, active) VALUES ($1, $2, $3, $4) RETURNING *`,
+      [first_name, last_name, age, active]
+    );
 
-  const sql = `
-  INSERT INTO users (id, first_name, last_name, age, active) 
-  VALUES ($1, $2, $3, $4, $5)`;
-
-  pool.query(
-    sql,
-    [
-      newUser.id,
-      newUser.first_name,
-      newUser.last_name,
-      newUser.age,
-      newUser.active,
-    ],
-    (error, result) => {
-      if (error) {
-        console.error("Error creating a new user:", error);
-        res.status(500).json({ message: "Error creating a new user" });
-      } else {
-        console.log("New user created successfully");
-        res.status(201).json({ message: "New user created successfully" });
-      }
-    }
-  );
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error("Error creating a new user:", error);
+    res.status(500).json({ message: "Error creating a new user" });
+  }
 };
 
 export const updateUser = (req, res) => {
